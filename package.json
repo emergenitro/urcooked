@@ -1,0 +1,24 @@
+{
+  "name": "urcooked",
+  "version": "1.0.0",
+  "description": "Terminal-native GitHub roast tool. curl urcooked.lol/<username>",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --env-file=.env --watch src/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@resvg/resvg-js": "^2.6.2",
+    "better-sqlite3": "^11.3.0",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^8.0.0",
+    "nanoid": "^5.0.7",
+    "openai": "^4.67.0"
+  }
+}

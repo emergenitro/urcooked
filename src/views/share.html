@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{username}} got cooked - urcooked.lol</title>
+<meta name="description" content="{{preview_line}}">
+<meta property="og:title" content="{{username}} got cooked on urcooked.lol">
+<meta property="og:description" content="{{preview_line}}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{share_url}}">
+<meta property="og:image" content="{{og_image_url}}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{username}} got cooked">
+<meta name="twitter:description" content="{{preview_line}}">
+<meta name="twitter:image" content="{{og_image_url}}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/public/style.css">
+</head>
+<body class="page-share">
+<div class="scanlines" aria-hidden="true"></div>
+
+<main class="share-wrap">
+  <a href="/" class="back-link">← urcooked.lol</a>
+
+  <article class="card">
+    <header class="card-head">
+      <img class="avatar" src="{{avatar_url}}" alt="" loading="lazy" width="64" height="64">
+      <div class="card-head-meta">
+        <p class="card-eyebrow">ur cooked,</p>
+        <h1 class="card-username">
+          <a href="{{github_url}}" target="_blank" rel="noopener">{{username}}</a>
+        </h1>
+        <p class="cooked-score">{{cooked_score}}/100 cooked</p>
+      </div>
+    </header>
+
+    <pre class="roast-text">{{roast_text}}</pre>
+
+    <footer class="card-foot">
+      <a class="btn btn-primary" href="/">roast someone else</a>
+      <a class="btn btn-x" href="{{tweet_intent}}" target="_blank" rel="noopener">
+        <span class="x-icon" aria-hidden="true">𝕏</span>
+        <span>brag about it</span>
+      </a>
+    </footer>
+  </article>
+
+  <p class="terminal-hint">
+    or run: <code>curl {{share_url}}</code>
+    <button class="copy" id="copy-btn" type="button">copy</button>
+  </p>
+</main>
+
+<script>
+document.getElementById('copy-btn').addEventListener('click', async (e) => {
+  const btn = e.currentTarget;
+  try {
+    await navigator.clipboard.writeText('curl {{share_url}}');
+    btn.textContent = 'copied';
+    setTimeout(() => { btn.textContent = 'copy'; }, 1500);
+  } catch {
+    btn.textContent = 'fail';
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{user1}} vs {{user2}} - urcooked.lol</title>
+<meta name="description" content="{{preview_line}}">
+<meta property="og:title" content="{{user1}} vs {{user2}} - who got cooked?">
+<meta property="og:description" content="{{preview_line}}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{share_url}}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{{user1}} vs {{user2}} GitHub battle">
+<meta name="twitter:description" content="{{preview_line}}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/public/style.css">
+<style>
+.battle-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.battle-contestant {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.battle-contestant .avatar {
+  border-radius: 50%;
+  border: 2px solid #333;
+}
+.battle-contestant.winner .avatar {
+  border-color: #e5e5e5;
+  box-shadow: 0 0 12px rgba(255,255,255,0.2);
+}
+.battle-contestant.loser .avatar {
+  opacity: 0.5;
+  filter: grayscale(60%);
+}
+.battle-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #555;
+}
+.battle-label.winner-label {
+  color: #e5e5e5;
+}
+.battle-vs {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #444;
+  align-self: center;
+}
+.battle-verdict {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #222;
+  font-size: 0.8rem;
+  color: #aaa;
+}
+.battle-verdict strong {
+  color: #e5e5e5;
+}
+</style>
+</head>
+<body class="page-share">
+<div class="scanlines" aria-hidden="true"></div>
+
+<main class="share-wrap">
+  <a href="/" class="back-link">← urcooked.lol</a>
+
+  <article class="card">
+    <div class="battle-head">
+      <div class="battle-contestant {{winner_class_1}}">
+        <img class="avatar" src="{{avatar1_url}}" alt="" loading="lazy" width="64" height="64">
+        <a href="{{github1_url}}" target="_blank" rel="noopener" class="card-username" style="font-size:0.9rem">{{user1}}</a>
+        <span class="battle-label {{winner_label_1}}">{{verdict_label_1}}</span>
+      </div>
+
+      <span class="battle-vs">vs</span>
+
+      <div class="battle-contestant {{winner_class_2}}">
+        <img class="avatar" src="{{avatar2_url}}" alt="" loading="lazy" width="64" height="64">
+        <a href="{{github2_url}}" target="_blank" rel="noopener" class="card-username" style="font-size:0.9rem">{{user2}}</a>
+        <span class="battle-label {{winner_label_2}}">{{verdict_label_2}}</span>
+      </div>
+    </div>
+
+    <pre class="roast-text">{{roast_text}}</pre>
+
+    <footer class="card-foot">
+      <a class="btn btn-primary" href="/">roast me</a>
+      <a class="btn btn-primary" href="{{battle_url}}">rematch</a>
+      <a class="btn btn-x" href="{{tweet_intent}}" target="_blank" rel="noopener">
+        <span class="x-icon" aria-hidden="true">𝕏</span>
+        <span>share on x</span>
+      </a>
+    </footer>
+  </article>
+
+  <p class="terminal-hint">
+    or run: <code>curl {{share_url}}</code>
+    <button class="copy" id="copy-btn" type="button">copy</button>
+  </p>
+</main>
+
+<script>
+document.getElementById('copy-btn').addEventListener('click', async (e) => {
+  const btn = e.currentTarget;
+  try {
+    await navigator.clipboard.writeText('curl {{share_url}}');
+    btn.textContent = 'copied';
+    setTimeout(() => { btn.textContent = 'copy'; }, 1500);
+  } catch {
+    btn.textContent = 'fail';
+  }
+});
+</script>
+</body>
+</html>

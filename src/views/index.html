@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>urcooked.lol - get your github roasted</title>
+<meta name="description" content="curl urcooked.lol/&lt;username&gt; and get your GitHub profile roasted by AI.">
+<meta property="og:title" content="urcooked.lol">
+<meta property="og:description" content="curl urcooked.lol/&lt;username&gt; and get your GitHub profile roasted by AI.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/public/style.css">
+</head>
+<body class="page-landing">
+<div class="scanlines" aria-hidden="true"></div>
+
+<main class="container">
+  <header class="masthead">
+    <div class="logo">
+      <span class="logo-prompt">$</span>
+      <span class="logo-text">urcooked.lol</span>
+    </div>
+    <p class="tagline">your github profile, roasted by ai. via curl.</p>
+  </header>
+
+  <section class="terminal" aria-label="example terminal session">
+    <div class="terminal-chrome">
+      <span class="dot dot-red"></span>
+      <span class="dot dot-yellow"></span>
+      <span class="dot dot-green"></span>
+      <span class="terminal-title">~/cooked</span>
+    </div>
+    <pre class="terminal-body" id="demo"></pre>
+  </section>
+
+  <section class="cta">
+    <p class="cta-label">try it</p>
+    <div class="cta-cmd">
+      <code id="cta-code">curl urcooked.lol/<span class="ph">your-username</span></code>
+      <button class="copy" id="copy-btn" type="button">copy</button>
+    </div>
+
+    <div class="or">- or -</div>
+
+    <form class="username-form" id="form" autocomplete="off">
+      <span class="form-prompt">github.com/</span>
+      <input
+        type="text"
+        id="username"
+        name="username"
+        placeholder="username"
+        required
+        pattern="^(?!-)(?!.*--)[a-zA-Z0-9-]{1,39}(?&lt;!-)$"
+        maxlength="39"
+        spellcheck="false"
+        autocapitalize="off">
+      <button type="submit" class="btn-roast">roast me</button>
+    </form>
+  </section>
+
+  <section class="cta battle-cta">
+    <p class="cta-label">or battle a friend</p>
+    <div class="cta-cmd">
+      <code id="battle-code">curl urcooked.lol/vs/<span class="ph">user1</span>/<span class="ph">user2</span></code>
+      <button class="copy" id="battle-copy-btn" type="button">copy</button>
+    </div>
+
+    <form class="username-form battle-form" id="battle-form" autocomplete="off">
+      <span class="form-prompt">vs/</span>
+      <input
+        type="text"
+        id="battle-user1"
+        name="user1"
+        placeholder="user1"
+        required
+        pattern="^(?!-)(?!.*--)[a-zA-Z0-9-]{1,39}(?&lt;!-)$"
+        maxlength="39"
+        spellcheck="false"
+        autocapitalize="off">
+      <span class="form-prompt">/</span>
+      <input
+        type="text"
+        id="battle-user2"
+        name="user2"
+        placeholder="user2"
+        required
+        pattern="^(?!-)(?!.*--)[a-zA-Z0-9-]{1,39}(?&lt;!-)$"
+        maxlength="39"
+        spellcheck="false"
+        autocapitalize="off">
+      <button type="submit" class="btn-roast">⚔ battle</button>
+    </form>
+  </section>
+
+  <footer class="foot">
+    <a href="https://github.com/" rel="noopener">github</a>
+    <span class="sep">·</span>
+    <span>no data stored beyond your roast id.</span>
+  </footer>
+</main>
+
+<script>
+(function() {
+  // Typing animation for the demo terminal
+  const lines = [
+    { text: '$ curl urcooked.lol/torvalds', cls: 'cmd', delay: 30 },
+    { text: '', delay: 200 },
+    { text: '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', cls: 'rule', delay: 5 },
+    { text: '  ur cooked, torvalds', cls: 'header', delay: 30 },
+    { text: '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', cls: 'rule', delay: 5 },
+    { text: '', delay: 200 },
+    { text: 'started linux. peaked in 1991.', cls: 'roast', delay: 25 },
+    { text: 'six repos and one of them is your dotfiles.', cls: 'roast', delay: 25 },
+    { text: 'still using mailing lists like its 2003.', cls: 'roast', delay: 25 },
+    { text: 'at least the kernel compiles.', cls: 'roast', delay: 25 },
+    { text: '', delay: 100 },
+    { text: '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', cls: 'rule', delay: 5 },
+    { text: '  share your roast → urcooked.lol/r/xk92p', cls: 'share', delay: 30 },
+    { text: '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', cls: 'rule', delay: 5 },
+  ];
+
+  const target = document.getElementById('demo');
+  let cancelled = false;
+
+  async function type() {
+    target.textContent = '';
+    for (const line of lines) {
+      if (cancelled) return;
+      const span = document.createElement('span');
+      if (line.cls) span.className = 'tl tl-' + line.cls;
+      target.appendChild(span);
+      for (const ch of line.text) {
+        if (cancelled) return;
+        span.textContent += ch;
+        await sleep(line.delay);
+      }
+      target.appendChild(document.createTextNode('\n'));
+      await sleep(line.delay * 4 || 80);
+    }
+    await sleep(2500);
+  }
+
+  function sleep(ms) {
+    return new Promise((r) => setTimeout(r, ms));
+  }
+
+  // Start when in viewport
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) { io.disconnect(); type(); }
+    });
+    io.observe(target);
+  } else {
+    type();
+  }
+
+  // Form submit -> /:username
+  document.getElementById('form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const u = document.getElementById('username').value.trim();
+    if (!u) return;
+    cancelled = true;
+    window.location.href = '/' + encodeURIComponent(u);
+  });
+
+  // Copy button
+  const copyBtn = document.getElementById('copy-btn');
+  copyBtn.addEventListener('click', async () => {
+    const text = 'curl urcooked.lol/' + (document.getElementById('username').value.trim() || 'your-username');
+    try {
+      await navigator.clipboard.writeText(text);
+      copyBtn.textContent = 'copied';
+      setTimeout(() => { copyBtn.textContent = 'copy'; }, 1500);
+    } catch {
+      copyBtn.textContent = 'fail';
+    }
+  });
+
+  // Battle form
+  document.getElementById('battle-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const u1 = document.getElementById('battle-user1').value.trim();
+    const u2 = document.getElementById('battle-user2').value.trim();
+    if (!u1 || !u2) return;
+    window.location.href = '/vs/' + encodeURIComponent(u1) + '/' + encodeURIComponent(u2);
+  });
+
+  // Battle copy button
+  const battleCopyBtn = document.getElementById('battle-copy-btn');
+  battleCopyBtn.addEventListener('click', async () => {
+    const u1 = document.getElementById('battle-user1').value.trim() || 'user1';
+    const u2 = document.getElementById('battle-user2').value.trim() || 'user2';
+    const text = 'curl urcooked.lol/vs/' + u1 + '/' + u2;
+    try {
+      await navigator.clipboard.writeText(text);
+      battleCopyBtn.textContent = 'copied';
+      setTimeout(() => { battleCopyBtn.textContent = 'copy'; }, 1500);
+    } catch {
+      battleCopyBtn.textContent = 'fail';
+    }
+  });
+})();
+</script>
+</body>
+</html>
