@@ -46,6 +46,8 @@ app.get('/', (req, res) => {
   const userAgent = req.get('user-agent') || '';
   const isCurl = userAgent.includes('curl');
 
+  console.log('[root]', isCurl ? 'curl' : 'browser', 'user-agent:', userAgent.slice(0, 60));
+
   if (isCurl) {
     res.type('text/plain').send(`urcooked.lol - GitHub profile roasting via curl
 
