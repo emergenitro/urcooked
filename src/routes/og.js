@@ -12,7 +12,7 @@ ogRouter.get('/:id.png', async (req, res, next) => {
 
   let row;
   try {
-    row = getRoast(id);
+    row = await getRoast(id);
   } catch (err) {
     return next(err);
   }

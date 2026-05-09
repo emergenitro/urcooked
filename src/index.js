@@ -43,6 +43,26 @@ app.get('/robots.txt', (req, res) => {
 
 // Landing page
 app.get('/', (req, res) => {
+  const userAgent = req.get('user-agent') || '';
+  const isCurl = userAgent.includes('curl');
+
+  if (isCurl) {
+    res.type('text/plain').send(`urcooked.lol - GitHub profile roasting via curl
+
+usage:
+  curl urcooked.lol/<username>
+  curl urcooked.lol/vs/<user1>/<user2>
+
+examples:
+  curl urcooked.lol/torvalds
+  curl urcooked.lol/vs/octocat/gvanrossum
+
+share your roast:
+  curl urcooked.lol/r/<roast-id>
+`);
+    return;
+  }
+
   const html = renderTemplate('index.html', {
     base_url: process.env.BASE_URL || `http://localhost:${PORT}`,
   });

@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@fontsource/jetbrains-mono": "^5.2.8",
+    "@neondatabase/serverless": "^0.9.4",
     "@resvg/resvg-js": "^2.6.2",
-    "better-sqlite3": "^11.3.0",
     "express": "^4.21.0",
     "express-rate-limit": "^7.4.0",
     "helmet": "^8.0.0",

@@ -49,7 +49,7 @@ battleRouter.get('/:user1/:user2', limiter, async (req, res, next) => {
     return res.status(400).type('text/plain').send("can't battle yourself. that's just a mirror.\n");
   }
 
-  const cached = findRecentBattle(user1, user2, BATTLE_CACHE_TTL_MS);
+  const cached = await findRecentBattle(user1, user2, BATTLE_CACHE_TTL_MS);
   if (cached) {
     return serveCachedBattle(req, res, cached);
   }
@@ -106,7 +106,7 @@ async function handleBattleCurlStream(req, res, user1, user2, data1, data2, next
   const previewLine = extractPreviewLine(fullRoast);
 
   try {
-    saveBattle({ id, user1, user2, winner, roastText: fullRoast, previewLine });
+    await saveBattle({ id, user1, user2, winner, roastText: fullRoast, previewLine });
   } catch (err) {
     console.error('[battle/save]', err);
     res.write(verdictFooter(winner || '?', loser || '?', 'save failed'));
@@ -130,7 +130,7 @@ async function handleBattleBrowser(req, res, user1, user2, data1, data2, next) {
   const previewLine = extractPreviewLine(fullRoast);
 
   try {
-    saveBattle({ id, user1, user2, winner, roastText: fullRoast, previewLine });
+    await saveBattle({ id, user1, user2, winner, roastText: fullRoast, previewLine });
   } catch (err) {
     console.error('[battle/save browser]', err);
   }

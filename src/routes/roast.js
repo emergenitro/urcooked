@@ -46,7 +46,7 @@ roastRouter.get('/:username', limiter, async (req, res, next) => {
     return res.status(400).type('text/plain').send('invalid github username\n');
   }
 
-  const cached = findRecentByUsername(username, CACHE_TTL_MS);
+  const cached = await findRecentByUsername(username, CACHE_TTL_MS);
   if (cached) {
     return serveCached(req, res, cached);
   }
@@ -100,7 +100,7 @@ async function handleCurlStream(req, res, username, githubData, next) {
 
   const previewLine = extractPreviewLine(fullRoast);
   try {
-    saveRoast({ id, username, roastText: fullRoast, previewLine, cookedScore });
+    await saveRoast({ id, username, roastText: fullRoast, previewLine, cookedScore });
   } catch (err) {
     console.error('[roast/save]', err);
     res.write(scoredFooter('share link unavailable', cookedScore));
@@ -124,7 +124,7 @@ async function handleBrowser(req, res, username, githubData, next) {
   const cookedScore = computeCookedScore(githubData);
 
   try {
-    saveRoast({ id, username, roastText: fullRoast, previewLine, cookedScore });
+    await saveRoast({ id, username, roastText: fullRoast, previewLine, cookedScore });
   } catch (err) {
     console.error('[roast/save browser]', err);
   }

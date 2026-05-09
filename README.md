@@ -93,7 +93,7 @@ If the same username is roasted twice within 1 hour, the second request returns 
 
 ## tweaking the roast
 
-The system prompt is in `src/services/openai.js`. The data the model sees is in `src/services/github.js` — `fetchGithubProfile` builds the structured payload. Add or remove fields there to tune what the roast notices.
+The system prompt is in `src/services/openai.js`. The data the model sees is in `src/services/github.js` - `fetchGithubProfile` builds the structured payload. Add or remove fields there to tune what the roast notices.
 
 ## file map
 

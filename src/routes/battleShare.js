@@ -37,7 +37,7 @@ battleShareRouter.get('/:id', async (req, res, next) => {
 
   let row;
   try {
-    row = getBattle(id);
+    row = await getBattle(id);
   } catch (err) {
     return next(err);
   }
