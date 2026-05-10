@@ -39,60 +39,17 @@
   <section class="cta">
     <p class="cta-label">try it</p>
     <div class="cta-cmd">
-      <code id="cta-code">curl urcooked.lol/<span class="ph">your-username</span></code>
+      <code id="cta-code">curl https://urcooked.lol/<span class="ph">your-username</span></code>
       <button class="copy" id="copy-btn" type="button">copy</button>
     </div>
-
-    <div class="or">- or -</div>
-
-    <form class="username-form" id="form" autocomplete="off">
-      <span class="form-prompt">github.com/</span>
-      <input
-        type="text"
-        id="username"
-        name="username"
-        placeholder="username"
-        required
-        pattern="^(?!-)(?!.*--)[a-zA-Z0-9-]{1,39}(?&lt;!-)$"
-        maxlength="39"
-        spellcheck="false"
-        autocapitalize="off">
-      <button type="submit" class="btn-roast">roast me</button>
-    </form>
   </section>
 
   <section class="cta battle-cta">
     <p class="cta-label">or battle a friend</p>
     <div class="cta-cmd">
-      <code id="battle-code">curl urcooked.lol/vs/<span class="ph">user1</span>/<span class="ph">user2</span></code>
+      <code id="battle-code">curl https://urcooked.lol/vs/<span class="ph">user1</span>/<span class="ph">user2</span></code>
       <button class="copy" id="battle-copy-btn" type="button">copy</button>
     </div>
-
-    <form class="username-form battle-form" id="battle-form" autocomplete="off">
-      <span class="form-prompt">vs/</span>
-      <input
-        type="text"
-        id="battle-user1"
-        name="user1"
-        placeholder="user1"
-        required
-        pattern="^(?!-)(?!.*--)[a-zA-Z0-9-]{1,39}(?&lt;!-)$"
-        maxlength="39"
-        spellcheck="false"
-        autocapitalize="off">
-      <span class="form-prompt">/</span>
-      <input
-        type="text"
-        id="battle-user2"
-        name="user2"
-        placeholder="user2"
-        required
-        pattern="^(?!-)(?!.*--)[a-zA-Z0-9-]{1,39}(?&lt;!-)$"
-        maxlength="39"
-        spellcheck="false"
-        autocapitalize="off">
-      <button type="submit" class="btn-roast">⚔ battle</button>
-    </form>
   </section>
 
   <footer class="foot">
@@ -106,7 +63,7 @@
 (function() {
   // Typing animation for the demo terminal
   const lines = [
-    { text: '$ curl urcooked.lol/torvalds', cls: 'cmd', delay: 30 },
+    { text: '$ curl https://urcooked.lol/torvalds', cls: 'cmd', delay: 30 },
     { text: '', delay: 200 },
     { text: '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', cls: 'rule', delay: 5 },
     { text: '  ur cooked, torvalds', cls: 'header', delay: 30 },
@@ -118,7 +75,7 @@
     { text: 'at least the kernel compiles.', cls: 'roast', delay: 25 },
     { text: '', delay: 100 },
     { text: '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', cls: 'rule', delay: 5 },
-    { text: '  share your roast → urcooked.lol/r/xk92p', cls: 'share', delay: 30 },
+    { text: '  share your roast → https://urcooked.lol/r/xk92p', cls: 'share', delay: 30 },
     { text: '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', cls: 'rule', delay: 5 },
   ];
 
@@ -157,19 +114,10 @@
     type();
   }
 
-  // Form submit -> /:username
-  document.getElementById('form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const u = document.getElementById('username').value.trim();
-    if (!u) return;
-    cancelled = true;
-    window.location.href = '/' + encodeURIComponent(u);
-  });
-
   // Copy button
   const copyBtn = document.getElementById('copy-btn');
   copyBtn.addEventListener('click', async () => {
-    const text = 'curl urcooked.lol/' + (document.getElementById('username').value.trim() || 'your-username');
+    const text = 'curl https://urcooked.lol/your-username';
     try {
       await navigator.clipboard.writeText(text);
       copyBtn.textContent = 'copied';
@@ -179,21 +127,10 @@
     }
   });
 
-  // Battle form
-  document.getElementById('battle-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const u1 = document.getElementById('battle-user1').value.trim();
-    const u2 = document.getElementById('battle-user2').value.trim();
-    if (!u1 || !u2) return;
-    window.location.href = '/vs/' + encodeURIComponent(u1) + '/' + encodeURIComponent(u2);
-  });
-
   // Battle copy button
   const battleCopyBtn = document.getElementById('battle-copy-btn');
   battleCopyBtn.addEventListener('click', async () => {
-    const u1 = document.getElementById('battle-user1').value.trim() || 'user1';
-    const u2 = document.getElementById('battle-user2').value.trim() || 'user2';
-    const text = 'curl urcooked.lol/vs/' + u1 + '/' + u2;
+    const text = 'curl https://urcooked.lol/vs/user1/user2';
     try {
       await navigator.clipboard.writeText(text);
       battleCopyBtn.textContent = 'copied';

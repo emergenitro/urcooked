@@ -46,21 +46,19 @@ app.get('/', (req, res) => {
   const userAgent = req.get('user-agent') || '';
   const isCurl = userAgent.includes('curl');
 
-  console.log('[root]', isCurl ? 'curl' : 'browser', 'user-agent:', userAgent.slice(0, 60));
-
   if (isCurl) {
     res.type('text/plain').send(`urcooked.lol - GitHub profile roasting via curl
 
 usage:
-  curl urcooked.lol/<username>
-  curl urcooked.lol/vs/<user1>/<user2>
+  curl https://urcooked.lol/<username>
+  curl https://urcooked.lol/vs/<user1>/<user2>
 
 examples:
-  curl urcooked.lol/torvalds
-  curl urcooked.lol/vs/octocat/gvanrossum
+  curl https://urcooked.lol/torvalds
+  curl https://urcooked.lol/vs/octocat/gvanrossum
 
 share your roast:
-  curl urcooked.lol/r/<roast-id>
+  curl https://urcooked.lol/r/<roast-id>
 `);
     return;
   }
