@@ -62,7 +62,7 @@ shareRouter.get('/:id', async (req, res, next) => {
   }
 
   // Browser: pretty share page
-  const tweetText = `"${row.preview_line}" :: get roasted at urcooked.lol`;
+  const tweetText = `my github just got cooked 💀\n\n"${row.preview_line}"\n\nget yours →`;
   const tweetIntent = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(shareUrl)}`;
 
   let avatarUrl = null;

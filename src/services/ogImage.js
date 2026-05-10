@@ -1,29 +1,17 @@
 import { Resvg } from '@resvg/resvg-js';
 import { readFileSync } from 'node:fs';
-import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const require = createRequire(import.meta.url);
+const FONTS_DIR = path.join(__dirname, '../fonts');
 
-function loadFont(pkg, weight) {
-  try {
-    const pkgDir = path.dirname(require.resolve(`@fontsource/${pkg}/package.json`));
-    return readFileSync(path.join(pkgDir, `files/${pkg}-latin-${weight}-normal.woff2`));
-  } catch {
-    return null;
-  }
-}
-
-const MONTSERRAT_700 = loadFont('montserrat', 700);
-const MONTSERRAT_800 = loadFont('montserrat', 800);
-const POPPINS_400 = loadFont('poppins', 400);
-const POPPINS_700 = loadFont('poppins', 700);
-
-const FONT_BUFFERS = [MONTSERRAT_700, MONTSERRAT_800, POPPINS_400, POPPINS_700].filter(Boolean);
-
-console.log('FONT_BUFFERS count:', FONT_BUFFERS.length);
+const FONT_BUFFERS = [
+  'montserrat-latin-700-normal.woff2',
+  'montserrat-latin-800-normal.woff2',
+  'poppins-latin-400-normal.woff2',
+  'poppins-latin-700-normal.woff2',
+].map(f => { try { return readFileSync(path.join(FONTS_DIR, f)); } catch { return null; } }).filter(Boolean);
 
 
 async function fetchAvatarBase64(username) {
@@ -148,7 +136,6 @@ export async function generateOgImage(id, username, roastText) {
   const { lines, truncated } = extractLines(roastText, 6, 75);
   const svg = buildSvg(username, lines, truncated, avatarDataUrl);
 
-  console.log('Creating Resvg with', FONT_BUFFERS.length, 'fonts');
   const resvg = new Resvg(svg, {
     font: {
       fontBuffers: FONT_BUFFERS,
@@ -158,7 +145,6 @@ export async function generateOgImage(id, username, roastText) {
   });
 
   const png = resvg.render().asPng();
-  console.log('Generated PNG, size:', png.length);
 
   if (cache.size >= 500) {
     cache.delete(cache.keys().next().value);
