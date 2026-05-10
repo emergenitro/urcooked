@@ -7,19 +7,24 @@ import path from 'node:path';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
 
-function loadFont(weight) {
+function loadFont(pkg, weight) {
   try {
-    const pkgDir = path.dirname(require.resolve('@fontsource/jetbrains-mono/package.json'));
-    return readFileSync(path.join(pkgDir, `files/jetbrains-mono-latin-${weight}-normal.woff2`));
+    const pkgDir = path.dirname(require.resolve(`@fontsource/${pkg}/package.json`));
+    return readFileSync(path.join(pkgDir, `files/${pkg}-latin-${weight}-normal.woff2`));
   } catch {
     return null;
   }
 }
 
-const FONT_400 = loadFont(400);
-const FONT_700 = loadFont(700);
-const FONT_800 = loadFont(800);
-const FONT_BUFFERS = [FONT_400, FONT_700, FONT_800].filter(Boolean);
+const MONTSERRAT_700 = loadFont('montserrat', 700);
+const MONTSERRAT_800 = loadFont('montserrat', 800);
+const POPPINS_400 = loadFont('poppins', 400);
+const POPPINS_700 = loadFont('poppins', 700);
+
+const FONT_BUFFERS = [MONTSERRAT_700, MONTSERRAT_800, POPPINS_400, POPPINS_700].filter(Boolean);
+
+console.log('FONT_BUFFERS count:', FONT_BUFFERS.length);
+
 
 async function fetchAvatarBase64(username) {
   try {
@@ -96,14 +101,15 @@ function extractLines(rawText, maxLines, charsPerLine) {
 function buildSvg(username, roastLines, truncated, avatarDataUrl) {
   const W = 1200;
   const H = 630;
-  const FONT = 'JetBrains Mono';
+  const HEADING_FONT = 'Montserrat';
+  const BODY_FONT = 'Poppins';
 
   const displayName = username.length > 22 ? username.slice(0, 21) + '…' : username;
 
   const avatarEl = avatarDataUrl
     ? `<image href="${avatarDataUrl}" x="60" y="32" width="88" height="88" preserveAspectRatio="xMidYMid slice"/>`
     : `<rect x="60" y="32" width="88" height="88" fill="#1a1a1a"/>
-  <text x="104" y="88" font-family="${FONT}" font-size="38" fill="#333" text-anchor="middle">${escXml((username[0] || '?').toUpperCase())}</text>`;
+  <text x="104" y="88" font-family="${HEADING_FONT}" font-size="38" fill="#333" text-anchor="middle">${escXml((username[0] || '?').toUpperCase())}</text>`;
 
   const LINE_START_Y = 220;
   const LINE_H = 42;
@@ -111,7 +117,7 @@ function buildSvg(username, roastLines, truncated, avatarDataUrl) {
   const roastEls = roastLines.map((line, i) => {
     const isLast = i === roastLines.length - 1;
     const txt = escXml(line) + (isLast && truncated ? '…' : '');
-    return `<text x="60" y="${LINE_START_Y + i * LINE_H}" font-family="${FONT}" font-size="24" fill="#00ff88" xml:space="preserve">${txt}</text>`;
+    return `<text x="60" y="${LINE_START_Y + i * LINE_H}" font-family="${BODY_FONT}" font-size="24" fill="#00ff88" xml:space="preserve">${txt}</text>`;
   }).join('\n  ');
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
@@ -120,16 +126,16 @@ function buildSvg(username, roastLines, truncated, avatarDataUrl) {
 
   ${avatarEl}
 
-  <text x="168" y="68" font-family="${FONT}" font-size="12" fill="#ff3b30" letter-spacing="2.5" font-weight="700">UR COOKED,</text>
-  <text x="168" y="122" font-family="${FONT}" font-size="48" fill="#e8e8e8" font-weight="700">${escXml(displayName)}</text>
+  <text x="168" y="68" font-family="${HEADING_FONT}" font-size="12" fill="#ff3b30" letter-spacing="2.5" font-weight="800">UR COOKED,</text>
+  <text x="168" y="122" font-family="${HEADING_FONT}" font-size="48" fill="#e8e8e8" font-weight="800">${escXml(displayName)}</text>
 
   <rect x="60" y="156" width="1080" height="1" fill="#222222"/>
 
   ${roastEls}
 
   <rect x="60" y="568" width="1080" height="1" fill="#1a1a1a"/>
-  <text x="60" y="600" font-family="${FONT}" font-size="13" fill="#383838">$ urcooked.lol</text>
-  <text x="1140" y="600" font-family="${FONT}" font-size="13" fill="#242424" text-anchor="end">get roasted → urcooked.lol</text>
+  <text x="60" y="600" font-family="${BODY_FONT}" font-size="13" fill="#383838">$ urcooked.lol</text>
+  <text x="1140" y="600" font-family="${BODY_FONT}" font-size="13" fill="#242424" text-anchor="end">get roasted → urcooked.lol</text>
 </svg>`;
 }
 
@@ -142,15 +148,17 @@ export async function generateOgImage(id, username, roastText) {
   const { lines, truncated } = extractLines(roastText, 6, 75);
   const svg = buildSvg(username, lines, truncated, avatarDataUrl);
 
+  console.log('Creating Resvg with', FONT_BUFFERS.length, 'fonts');
   const resvg = new Resvg(svg, {
     font: {
-      fontBuffers: FONT_BUFFERS.length > 0 ? FONT_BUFFERS : undefined,
-      loadSystemFonts: FONT_BUFFERS.length === 0,
-      defaultFontFamily: 'JetBrains Mono',
+      fontBuffers: FONT_BUFFERS,
+      loadSystemFonts: false,
+      defaultFontFamily: 'Poppins',
     },
   });
 
   const png = resvg.render().asPng();
+  console.log('Generated PNG, size:', png.length);
 
   if (cache.size >= 500) {
     cache.delete(cache.keys().next().value);
